@@ -68,7 +68,7 @@ contract TokenFarm is Ownable {
     }
 
     //reward stakers with WETH
-    function rewardStakers() public {
+    function rewardStakers() public onlyOwner{
         //get total minty staked
        for (uint i = 0; i < stakers.length; i++) {
             //get amount staked
@@ -76,18 +76,22 @@ contract TokenFarm is Ownable {
             //get amount to reward
             uint256 amountToReward = amountStaked * farmBalance/totalMintyStaked;
             //set reward balance
-            rewardBalance[stakers[i]] = amountToReward;
+            rewardBalance[stakers[i]] += amountToReward;
         }
         // set farm balance to zero
         farmBalance = 0;
     }
 
     //withdraw reward
-    function withdrawReward(address _token, uint _amount) public {
+    function withdrawReward(uint _amount, address _token) public {
         //check if token is minty
         require(_token == WethToken,"Only Weth Token is allowed");
         // fetch reward balance
         uint256 userRewardBalance = rewardBalance[msg.sender];
+        //check if amount is more than reward balance
+        require(_amount <= userRewardBalance,"Amount must be less than or equal to reward balance");
+        // amount is greater than zero
+        require(_amount > 0,"Amount must be more than zero");
         //send amount to user
         IERC20(_token).transfer(msg.sender, userRewardBalance);
         //remove amount from reward balance

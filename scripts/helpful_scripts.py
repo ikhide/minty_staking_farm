@@ -5,6 +5,7 @@ from brownie import (
     config,
     MockWETH,
     Contract,
+    interface,
 )
 
 NON_FORKED_LOCAL_BLOCKCHAIN_ENVIRONMENTS = ["hardhat", "development", "ganache"]
@@ -18,16 +19,18 @@ contract_to_mock = {
     "weth_token": MockWETH,
 }
 
+INITIAL_PRICE_FEED_VALUE = 2000000000000000000000
+DECIMALS = 18
 
-
-def get_account(number=None):
+def get_account(index=None, id=None):
+    if index:
+        return accounts[index].address
     if network.show_active() in LOCAL_BLOCKCHAIN_ENVIRONMENTS:
         return accounts[0]
-    if number:
-        return accounts[number]
+    if id:
+        return accounts.load(id)
     if network.show_active() in config["networks"]:
-        account = accounts.add(config["wallets"]["from_key"])
-        return account
+        return accounts.add(config["wallets"]["from_key"])
     return None
 
 
@@ -121,3 +124,23 @@ def get_contract(contract_name):
                 f"brownie run scripts/deploy_mocks.py --network {network.show_active()}"
             )
     return contract
+
+def deploy_mocks():
+    """
+    Use this script if you want to deploy mocks to a testnet
+    """
+    print(f"The active network is {network.show_active()}")
+    print("Deploying Mocks...")
+    account = get_account()
+  
+    print("Deploying Mock WETH Token...")
+    weth_token = MockWETH.deploy({"from": account})
+    print(f"Deployed to {weth_token.address}")
+
+def approve_erc20(amount, spender, erc20_address, account):
+    print("Approving ERC20 token...")
+    erc20 = interface.IERC20(erc20_address)
+    tx = erc20.approve(spender, amount, {"from": account})
+    tx.wait(1)
+    print("Approved!")
+    return tx
