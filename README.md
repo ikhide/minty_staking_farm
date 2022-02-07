@@ -32,8 +32,6 @@ Set your `WEB3_INFURA_PROJECT_ID`, and `PRIVATE_KEY` [environment variables](htt
 
 You can get a `WEB3_INFURA_PROJECT_ID` by getting a free trial of [Infura](https://infura.io/). At the moment, it does need to be infura with brownie. If you get lost, you can [follow this guide](https://ethereumico.io/knowledge-base/infura-api-key-guide/) to getting a project key. You can find your `PRIVATE_KEY` from your ethereum wallet like [metamask](https://metamask.io/).
 
-You'll also need testnet rinkeby ETH and LINK. You can get LINK and ETH into your wallet by using the [rinkeby faucets located here](https://docs.chain.link/docs/link-token-contracts#rinkeby). If you're new to this, [watch this video.](https://www.youtube.com/watch?v=P7FX_1PePX0)
-
 You can add your environment variables to the `.env` file:
 
 ```
@@ -71,53 +69,34 @@ If the network you want doesn't already exist, see [the below section](#adding-a
 
 Otherwise, you can build, test, and deploy on your local environment.
 
-## Local Development
+## GET TEST WETH TOKEN
 
-For local testing [install ganache-cli](https://www.npmjs.com/package/ganache-cli)
+You'll need test WETH tokens to deploy to testnet.
 
-```bash
-npm install -g ganache-cli
-```
-
-or
-
-```bash
-yarn add global ganache-cli
-```
-
-All the scripts are designed to work locally or on a testnet. You can add a ganache-cli or ganache UI chain like so:
+run
 
 ```
-brownie networks add Ethereum ganache host=http://localhost:8545 chainid=1337
+brownie run scripts/get_weth.py --network <network_name>
 ```
-
-And update the brownie config accordingly. There is a `deploy_mocks` script that will launch and deploy mock Oracles, VRFCoordinators, Link Tokens, and Price Feeds on a Local Blockchain.
 
 ## Deploy Script
 
 ```
-brownie run scripts/deploy.py
-```
+brownie run scripts/deploy.py --network <network>
 
 ## Testing
 
 ```
+
 brownie test --network <network>
-```
+
+````
 
 ### To test development / local
 
 ```bash
 brownie test
-```
-
-### To test mainnet-fork
-
-This will test the same way as local testing, but you will need a connection to a mainnet blockchain (like with the infura environment variable.)
-
-```bash
-brownie test --network polygon-mainnet
-```
+````
 
 ### To test a testnet
 
