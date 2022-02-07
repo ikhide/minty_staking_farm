@@ -22,21 +22,6 @@ Or, if that doesn't work, via pip
 pip install eth-brownie
 ```
 
-2. Download the mix and install dependancies.
-
-```bash
-brownie bake chainlink-mix
-cd chainlink-mix
-pip install -r requirements.txt
-```
-
-This will open up a new Chainlink project. Or, you can clone from source:
-
-```bash
-git clone https://github.com/PatrickAlphaC/chainlink-mix
-cd chainlink-mix
-```
-
 ## Testnet Development
 
 If you want to be able to deploy to testnets, do the following.
@@ -111,33 +96,14 @@ And update the brownie config accordingly. There is a `deploy_mocks` script that
 ## Deploy Script
 
 ```
-brownie run scripts/deploy_lottery.py
+brownie run scripts/deploy.py
 ```
-
-You will need LINK and ETH in your wallet to run this script. Visit [the rinkeby faucet](https://docs.chain.link/docs/link-token-contracts#rinkeby) to get LINK and ETH.
 
 ## Testing
-
-There are 2 types of tests in this project.
-
-- unit tests, which run on a local blockchain.
-- integration tests, which run on a testnet
-
-To run the unit tests:
-
-```
-brownie test
-```
-
-integration tests:
 
 ```
 brownie test --network <network>
 ```
-
-For more information on effective testing with Chainlink, check out [Testing Smart Contracts](https://blog.chain.link/testing-chainlink-smart-contracts/)
-
-Tests are really robust here! They work for local development and testnets. There are a few key differences between the testnets and the local networks. We utilize mocks so we can work with fake oracles on our testnets.
 
 ### To test development / local
 
@@ -150,7 +116,7 @@ brownie test
 This will test the same way as local testing, but you will need a connection to a mainnet blockchain (like with the infura environment variable.)
 
 ```bash
-brownie test --network mainnet-fork
+brownie test --network polygon-mainnet
 ```
 
 ### To test a testnet
@@ -158,7 +124,7 @@ brownie test --network mainnet-fork
 Rinkeby is currently supported
 
 ```bash
-brownie test --network rinkeby
+brownie test --network mumbai
 ```
 
 ## Adding additional Chains
